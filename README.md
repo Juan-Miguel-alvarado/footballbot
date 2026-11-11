@@ -62,6 +62,10 @@ Everything the bot sends follows its logo and banner: a lavender player kicking 
 - **Text is sized for phones**, where Discord shrinks images to about 400 px wide.
 - **Messages** use the same lavender, keep emojis to flags and a few status marks, and never repeat what the image already shows. Cards go out as plain images (Discord shows them bigger), times are Discord timestamps (everyone sees their own timezone), commands are clickable, and dead ends get a button (next day, today's matches, play again).
 
+<p align="center">
+  <img src="docs/cards.png" alt="Every card the bot draws: standings, team profile, trivia rounds, answers, podium and leaderboard" width="760">
+</p>
+
 To change the look, start with the palette at the top of [`footballbot/imaging/draw.py`](footballbot/imaging/draw.py); [GUIA.md](GUIA.md) explains where each card lives.
 
 ---
