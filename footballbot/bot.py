@@ -47,7 +47,7 @@ EXTENSIONS = (
 # Discord messages are capped at 2000 characters
 MAX_TRACEBACK = 1800
 # Color de los mensajes de error
-ERROR_COLOR = discord.Color.from_rgb(214, 69, 69)  # rojo apagado, el mismo de las tarjetas
+ERROR_COLOR = discord.Color.from_rgb(226, 106, 118)  # coral, el mismo de las tarjetas
 
 
 class FootballBot(commands.Bot):

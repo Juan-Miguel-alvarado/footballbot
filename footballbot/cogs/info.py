@@ -70,7 +70,7 @@ _STATUS_LABELS = {
     MatchStatus.CANCELLED: "CAN",
 }
 # Barra gris de los embeds "no hay nada ahora" (/live vacío)
-IDLE_COLOR = discord.Color.from_rgb(90, 99, 116)
+IDLE_COLOR = discord.Color.from_rgb(92, 100, 134)
 # Raya de los marcadores ("2\u20131"): la tipográficamente correcta, más fina que un guion
 DASH = "\u2013"
 # Racha de /team en texto (solo si falla la tarjeta): ganó, empató, perdió.

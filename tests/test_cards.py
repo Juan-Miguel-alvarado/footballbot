@@ -189,9 +189,10 @@ def test_avatar_with_and_without_picture() -> None:
 
 
 def test_logo_has_a_transparent_background() -> None:
-    from footballbot.imaging.draw import logo, shards
+    from footballbot.imaging.draw import icon, logo, shards
 
     image = logo(200)
-    assert image.width == 200
-    assert image.getpixel((0, image.height - 1))[3] == 0  # la esquina (antes negra) es transparente
-    assert shards(80).width == 80
+    assert image.height == 200
+    assert image.getpixel((0, image.height - 1))[3] == 0  # la esquina es transparente
+    assert icon(64).getpixel((0, 0))[3] == 0  # la ficha tiene las esquinas redondeadas
+    assert shards(80).width <= 80

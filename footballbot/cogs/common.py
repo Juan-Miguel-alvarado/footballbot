@@ -23,8 +23,8 @@ from footballbot.services.leagues import League, find_league, search_leagues
 if TYPE_CHECKING:
     from footballbot.bot import FootballBot
 
-# El azul del logo del bot (#0B96FE): la barra lateral de todos los embeds
-COLOR = discord.Color.from_rgb(11, 150, 254)
+# El lavanda del logo del bot (#7C8ACE): la barra lateral de todos los embeds
+COLOR = discord.Color.from_rgb(124, 138, 206)
 BRAND_NAME = "FootballTrivia"
 
 # Discord limits
@@ -125,12 +125,12 @@ def parse_league(value: str | None) -> League | None:
 def logo_file() -> discord.File:
     """El logo del bot con fondo transparente, para la miniatura de un embed.
 
-    El avatar del bot tiene fondo negro y en el embed se ve un cuadrado; este no.
+    Es el icono del bot (ficha clara redondeada), con las esquinas transparentes.
     Úsalo con `embed.set_thumbnail(url=LOGO_URL)` y `send(..., file=logo_file())`.
     """
-    from footballbot.imaging.draw import logo, to_png  # aquí: Pillow solo cuando hace falta
+    from footballbot.imaging.draw import icon, to_png  # aquí: Pillow solo cuando hace falta
 
-    return discord.File(io.BytesIO(to_png(logo(256), keep_alpha=True)), filename="logo.png")
+    return discord.File(io.BytesIO(to_png(icon(256), keep_alpha=True)), filename="logo.png")
 
 
 LOGO_URL = "attachment://logo.png"

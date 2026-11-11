@@ -64,7 +64,7 @@ footballbot/
 │   ├── cards.py             Tarjetas en imagen: tabla de posiciones y perfil de equipo
 │   ├── trivia_cards.py      Tarjetas de la trivia: ronda, respuesta, podio y ranking
 │   ├── fonts/               Inter (texto) y Oswald (títulos), fuentes libres (OFL)
-│   └── assets/logo.png      El logo del bot: se usa como marca y decoración en las tarjetas
+│   └── assets/figure.png    La figura del logo del bot: el icono de cada tarjeta y las miniaturas
 │
 ├── storage/                 ── BASE DE DATOS (SQLite) ──
 │   ├── db.py                Conexión y migraciones
@@ -165,7 +165,7 @@ Los `__init__.py` solo le dicen a Python que la carpeta es un paquete; no tienen
 | **Un comando nuevo** | Copia `leagues` (simple) o `standings` (con API) en [cogs/info.py](footballbot/cogs/info.py). Si necesita datos, añade un método en [services/football.py](footballbot/services/football.py). Anótalo en [COMMANDS.md](COMMANDS.md) |
 | **Un archivo de comandos nuevo** (ej. `trivia.py`) | Créalo en `cogs/` con una función `setup(bot)` al final (copia la de [admin.py](footballbot/cogs/admin.py)) y añádelo a `EXTENSIONS` en [bot.py](footballbot/bot.py) |
 | **Cambiar cómo se ve un comando** | Las funciones `_match_line`, `_table_block`, `_team_embed` al final de [cogs/info.py](footballbot/cogs/info.py) |
-| **El estilo de las tarjetas** (colores, fuentes, logo) | Arriba de [imaging/draw.py](footballbot/imaging/draw.py): la paleta sale del logo (negro y azul `#0B96FE`). La distribución de cada tarjeta, en [imaging/cards.py](footballbot/imaging/cards.py) y [imaging/trivia_cards.py](footballbot/imaging/trivia_cards.py). Regla del estilo: fondo negro plano, esquinas rectas, un solo azul y el logo como marca |
+| **El estilo de las tarjetas** (colores, fuentes, logo) | Arriba de [imaging/draw.py](footballbot/imaging/draw.py): la paleta sale del logo y del cartel (índigo, lavanda `#7C8ACE` y tiza). La distribución de cada tarjeta, en [imaging/cards.py](footballbot/imaging/cards.py) y [imaging/trivia_cards.py](footballbot/imaging/trivia_cards.py). Regla del estilo: fondo índigo, esquinas redondeadas, un solo acento lavanda, el icono del bot como marca y trazos de tiza (líneas de cancha, flechas) como decoración |
 | **El color de los mensajes de texto** | `COLOR` en [cogs/common.py](footballbot/cogs/common.py) (el azul del logo). Ahí también están `command_mention` (comandos clicables), `timestamp` (horas en la zona de cada uno) y `logo_file` (el logo transparente para miniaturas) |
 | **Las zonas o el color de una liga en `/standings`** (puestos de Champions, descenso...) | `ZONES` y `COLORS` en [services/leagues.py](footballbot/services/leagues.py) |
 | **Añadir una liga o un apodo** | `LEAGUES` en [services/leagues.py](footballbot/services/leagues.py) |
