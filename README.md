@@ -55,12 +55,12 @@ The full catalog, including what is planned, is in [COMMANDS.md](COMMANDS.md).
 
 ## Look
 
-Everything the bot sends follows its logo: a blue ball breaking into fragments on black.
+Everything the bot sends follows its logo and banner: a lavender player kicking a ball, and a futsal court at night drawn in indigo and chalk.
 
-- **Cards** (standings, team, trivia rounds, answers, podium, leaderboard) are drawn by the bot with Pillow: flat black, one electric blue (`#0B96FE`), square corners, the logo as a mark in the header and its fragments as decoration.
-- **Crests are stickers**: a light outline that follows their shape, so dark crests (Juventus, Newcastle) still show on black.
+- **Cards** (standings, team, trivia rounds, answers, podium, leaderboard) are drawn by the bot with Pillow: deep indigo background, one lavender accent (`#7C8ACE`), chalk-white text, rounded rows and chips, the bot's icon in the header, faint court lines and chalk arrows (like the banner) as decoration.
+- **Crests are stickers**: a light outline that follows their shape, so dark crests (Juventus, Newcastle) still show on indigo.
 - **Text is sized for phones**, where Discord shrinks images to about 400 px wide.
-- **Messages** use the same blue, keep emojis to flags and a few status marks, and never repeat what the image already shows. Cards go out as plain images (Discord shows them bigger), times are Discord timestamps (everyone sees their own timezone), commands are clickable, and dead ends get a button (next day, today's matches, play again).
+- **Messages** use the same lavender, keep emojis to flags and a few status marks, and never repeat what the image already shows. Cards go out as plain images (Discord shows them bigger), times are Discord timestamps (everyone sees their own timezone), commands are clickable, and dead ends get a button (next day, today's matches, play again).
 
 To change the look, start with the palette at the top of [`footballbot/imaging/draw.py`](footballbot/imaging/draw.py); [GUIA.md](GUIA.md) explains where each card lives.
 

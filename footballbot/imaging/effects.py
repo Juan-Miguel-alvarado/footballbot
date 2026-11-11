@@ -25,10 +25,10 @@ from footballbot.imaging.draw import outline_icon
 SIZE = 400  # la imagen final es cuadrada, SIZE x SIZE píxeles
 # Fondo oscuro (casi el negro del logo). Los escudos llevan un borde claro de sticker, así se
 # ven también los negros (Juventus) sin poner un recuadro claro que encandile.
-BACKGROUND = (18, 23, 32)
+BACKGROUND = (35, 41, 68)
 CREST_SCALE = 0.8  # el escudo ocupa el 80 % del lado; el resto es margen
 # La silueta se rellena con el azul del logo: se ve sobre el fondo oscuro y es de la marca
-SILHOUETTE_COLOR = (11, 150, 254)
+SILHOUETTE_COLOR = (124, 138, 206)
 
 
 def scaled_crest(data: bytes, outlined: bool = True) -> Image.Image:

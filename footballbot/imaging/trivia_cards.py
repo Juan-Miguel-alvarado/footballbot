@@ -30,6 +30,7 @@ from footballbot.imaging.draw import (
     font,
     hex_texture,
     paste,
+    rounded,
     shards,
     tile,
     to_png,
@@ -91,9 +92,9 @@ def round_card(
     # La imagen de la etapa (ya con fondo oscuro) en un marco recto fino
     size = 432
     left, top = (WIDTH - size) // 2, 150
-    draw.rectangle((left - 2, top - 2, left + size + 1, top + size + 1), fill=LINE)
+    rounded(draw, (left - 3, top - 3, left + size + 2, top + size + 2), fill=LINE, radius=22)
     image = Image.open(io.BytesIO(stage_image)).convert("RGBA").resize((size, size))
-    canvas.paste(image, (left, top))
+    canvas.paste(image, (left, top), _round_mask(size, 20))
 
     # La pregunta, grande, debajo de la imagen
     if prompt:
@@ -110,17 +111,19 @@ def round_card(
         box = (x0, y0, x0 + segment, y1)
         label = f"{value} PTS"
         if i == stage:
-            draw.rectangle(box, fill=BLUE)
+            rounded(draw, box, fill=BLUE, radius=12)
             color = TEXT
             label += " NOW"
         elif i < stage:
-            draw.rectangle(box, fill=PANEL)
+            rounded(draw, box, fill=PANEL, radius=12)
             color = LINE_TEXT  # ya no se pueden ganar
         else:
-            draw.rectangle(box, outline=LINE, width=2)
+            rounded(draw, box, outline=LINE, width=2, radius=12)
             color = MUTED
-        draw.text((x0 + segment // 2, (y0 + y1) // 2), label,
-                  font=font("title", 27, "SemiBold"), fill=color, anchor="mm")  # fmt: skip
+        # Que quepa en la ficha ("100 PTS NOW" es el más largo)
+        label_font = fit_font(label, "title", "Bold", 25, segment - 24, 16)
+        draw.text((x0 + segment // 2, (y0 + y1) // 2), label, font=label_font, fill=color,
+                  anchor="mm")  # fmt: skip
     return to_png(canvas)
 
 
@@ -149,8 +152,8 @@ def reveal_card(
     burst = shards(140, opacity=1.0 if success else 0.7)
     if not success:
         # Sin acierto: los fragmentos en gris y "cayendo" (girados hacia abajo)
-        # Gris con un toque del rojo de "fallo", como la raya de abajo
-        gray = Image.new("RGBA", burst.size, (150, 120, 128, 255))
+        # Tiza apagada: nadie acertó (la raya de abajo pone el rojo)
+        gray = Image.new("RGBA", burst.size, (*MUTED, 255))
         gray.putalpha(burst.getchannel("A"))
         burst = gray.rotate(-35, expand=True, resample=Image.Resampling.BICUBIC)
     # A los dos lados del escudo, como si el balón estallara
@@ -180,7 +183,7 @@ def reveal_card(
         draw.text((x + result_font.getlength(text) + gap, 588), extra, font=points_font,
                   fill=BLUE, anchor="lm")  # fmt: skip
     # Una raya debajo: azul si alguien acertó, roja apagada si no
-    draw.rectangle((cx - 60, 634, cx + 60, 637), fill=BLUE if success else LOSS)
+    rounded(draw, (cx - 60, 633, cx + 60, 638), fill=BLUE if success else LOSS, radius=3)
     wordmark(draw, (36, height - 24), anchor="lm")
     return to_png(canvas)
 
@@ -208,12 +211,12 @@ def podium_card(*, title: str, subtitle: str, players: Sequence[PlayerEntry]) ->
     for place, x, block_h in spots:
         top = floor - block_h
         player = players[place]
-        draw.rectangle((x - 92, top, x + 92, floor), fill=PODIUM_FILLS[place])
+        rounded(draw, (x - 92, top, x + 92, floor), fill=PODIUM_FILLS[place], radius=18)
         draw.text((x, top + 44), str(place + 1), font=font("title", 60, "Bold"), fill=TEXT,
                   anchor="mm")  # fmt: skip
-        draw.text((x, top + 104), f"{player.points} PTS",
-                  font=font("title", 42 if place == 0 else 30, "SemiBold"), fill=TEXT,
-                  anchor="mm")  # fmt: skip
+        points_label = f"{player.points} PTS"
+        points_font = fit_font(points_label, "title", "Bold", 36 if place == 0 else 28, 160, 18)
+        draw.text((x, top + 104), points_label, font=points_font, fill=TEXT, anchor="mm")
         size = 104 if place == 0 else 88
         ay = top - 34 - size // 2 - 30
         ring = size // 2 + 4
@@ -275,7 +278,7 @@ def _header(
         draw.text((38, 98), subtitle, font=font("title", 25, "SemiBold"),
                   fill=BLUE if accent else SOFT, anchor="lm")  # fmt: skip
     brand(canvas, right=WIDTH - 28, top=22, size=118)
-    draw.rectangle((0, 124, WIDTH, 127), fill=BLUE)
+    draw.rectangle((0, 125, WIDTH, 126), fill=BLUE)
 
 
 def _player_row(
@@ -289,10 +292,10 @@ def _player_row(
 ) -> None:
     middle = y + row_h // 2
     if rank % 2:
-        draw.rectangle((24, y, WIDTH - 24, y + row_h - 1), fill=PANEL)
+        rounded(draw, (24, y + 2, WIDTH - 24, y + row_h - 3), fill=PANEL, radius=14)
     # Puesto: cuadrado azul para los 3 primeros, número gris para el resto
     if rank <= 3:
-        draw.rectangle((44, middle - 19, 82, middle + 19), fill=PODIUM_FILLS[rank - 1])
+        rounded(draw, (44, middle - 19, 82, middle + 19), fill=PODIUM_FILLS[rank - 1], radius=10)
         draw.text((63, middle), str(rank), font=font("title", 24, "Bold"), fill=TEXT,
                   anchor="mm")  # fmt: skip
     else:
@@ -314,8 +317,16 @@ def _player_row(
                   fill=TEXT, anchor="lm")  # fmt: skip
     if rank == 1 and not small:
         # El primero: una franja azul a la izquierda y sus puntos más grandes
-        draw.rectangle((24, y, 30, y + row_h - 1), fill=BLUE)
+        rounded(draw, (24, y + 2, WIDTH - 24, y + row_h - 3), outline=BLUE, width=2, radius=14)
     size_pts = 26 if small else (36 if rank == 1 else 30)
     draw.text((WIDTH - 50, middle), f"{player.points:,} PTS",
               font=font("title", size_pts, "SemiBold"), fill=BLUE,
               anchor="rm")  # fmt: skip
+
+
+def _round_mask(size: int, radius: int) -> Image.Image:
+    """Máscara cuadrada con las esquinas redondeadas (para recortar la imagen de la ronda)."""
+    k = 3
+    mask = Image.new("L", (size * k, size * k), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, size * k - 1, size * k - 1), radius * k, 255)
+    return mask.resize((size, size), Image.Resampling.LANCZOS)

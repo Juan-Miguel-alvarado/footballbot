@@ -140,7 +140,9 @@ def _latency_color(ms: float) -> discord.Color:
     """Color del embed de /ping, el mismo que el punto: verde si va rápido, ámbar, rojo."""
     if ms < 150:
         return discord.Color.from_rgb(35, 165, 90)
-    return discord.Color.from_rgb(212, 167, 44) if ms < 400 else discord.Color.from_rgb(214, 69, 69)
+    return (
+        discord.Color.from_rgb(212, 167, 44) if ms < 400 else discord.Color.from_rgb(226, 106, 118)
+    )
 
 
 def _dot(ms: float) -> str:

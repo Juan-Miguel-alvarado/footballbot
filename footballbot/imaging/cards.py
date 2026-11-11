@@ -29,6 +29,7 @@ from footballbot.imaging.draw import (
     hex_texture,
     logo,
     paste,
+    rounded,
     tile,
     to_png,
     truncate,
@@ -130,7 +131,7 @@ def standings_card(
     pts_font = font("text", 31 if big else 26, "Bold")
     for group in groups:
         if group.title:
-            draw.rectangle((24, y + 18, 30, y + GROUP_TITLE_H - 10), fill=BLUE)
+            rounded(draw, (24, y + 18, 30, y + GROUP_TITLE_H - 10), fill=BLUE, radius=3)
             draw.text((42, y + GROUP_TITLE_H // 2 + 4), group.title.upper(),
                       font=font("title", 26, "SemiBold"), fill=TEXT, anchor="lm")  # fmt: skip
             y += GROUP_TITLE_H
@@ -147,7 +148,7 @@ def standings_card(
         for line in legend_lines:
             x = 30
             for color, label in line:
-                draw.rectangle((x, y + 12, x + 18, y + 30), fill=color)
+                rounded(draw, (x, y + 12, x + 18, y + 30), fill=color, radius=6)
                 draw.text((x + 26, y + 21), label, font=_legend_font(), fill=TEXT, anchor="lm")
                 x += 26 + int(_legend_font().getlength(label)) + 22
             y += LEGEND_LINE_H
@@ -174,10 +175,10 @@ def _table_row(
         # La fila de una zona lleva un toque de su color: se ve aunque la franja sea fina
         base = _mix(base, row.zone_color, 0.10)
     if even or row.zone_color:
-        draw.rectangle((24, y, WIDTH - 24, y + row_h - 1), fill=base)
+        rounded(draw, (24, y + 2, WIDTH - 24, y + row_h - 3), fill=base, radius=12)
     if row.zone_color:
         # Franja a la izquierda: dice la zona (Champions, descenso...)
-        draw.rectangle((24, y, 36, y + row_h - 1), fill=row.zone_color)
+        rounded(draw, (28, y + 8, 35, y + row_h - 9), fill=row.zone_color, radius=4)
     # El puesto en blanco (en el color de la zona costaba leerlo); la franja ya dice la zona
     position_font = font("title", 29 if row_h > 46 else 25, "SemiBold")
     label = f"={row.position}" if tied else str(row.position)
@@ -300,7 +301,9 @@ def team_card(
     if form:
         x = 40
         for result in form:
-            draw.rectangle((x, y + 28, x + 56, y + 84), fill=FORM_COLORS.get(result, DRAW))
+            rounded(
+                draw, (x, y + 28, x + 56, y + 84), fill=FORM_COLORS.get(result, DRAW), radius=12
+            )
             draw.text((x + 28, y + 56), result, font=font("title", 30, "Bold"), fill=TEXT,
                       anchor="mm")  # fmt: skip
             x += 64
@@ -364,7 +367,7 @@ def _header(canvas: Image.Image, title: str, subtitle: str, emblem: bytes | None
     draw.text((152, 112), subtitle, font=font("text", 22, "Medium"), fill=MUTED, anchor="lm")
     brand(canvas, right=WIDTH - 28, top=30, size=128)
     # Línea azul que cierra la cabecera
-    draw.rectangle((0, HEADER_H - 4, WIDTH, HEADER_H - 1), fill=BLUE)
+    draw.rectangle((0, HEADER_H - 3, WIDTH, HEADER_H - 2), fill=BLUE)
 
 
 def _footer(draw: ImageDraw.ImageDraw, height: int) -> None:
